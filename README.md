@@ -20,7 +20,7 @@ Dependencies:
 
 <h3>Libraries</h3>
 
-Post these with the same name as the file and attach them to the projects.
+Publish these with the same name as the file and attach them to the projects or use them yourself.
 
 [FGUI.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FGUI.js) -> A very useful GUI & Animation Library For Code.org
 
