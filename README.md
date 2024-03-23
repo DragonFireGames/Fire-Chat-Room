@@ -5,12 +5,12 @@ FCR for yourself, here is the code for you to do so:
 All the code in the libraries folder has to be put in separate 
 projects and attached as gamelab libraries to the main projects.
 
-FCR.js -> Original FCR in all its glory
+FCR.js -> Original FCR in all its glory<br>
 Dependencies:
 - Vault.js (Optional, Strongly recommended)
 - FullEmojiList.js (Optional)
 
-FCR2.js -> New Version of FCR which uses the cdo-backend
+FCR2.js -> New Version of FCR which uses the cdo-backend<br>
 Dependencies:
 - FGUI.js (Required)
 - FKEY.js (Required)
