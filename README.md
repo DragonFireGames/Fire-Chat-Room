@@ -16,7 +16,7 @@ Dependencies:
 Dependencies:
 <br>- [FGUI.js](https://github.com/DragonFireGames/Fire-Chat-Room/blob/main/libraries/FGUI.js) (Required)
 <br>- [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/blob/main/libraries/FKEY.js) (Required)
-<br>- [Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/blob/main/libraries/Vault.js) (Required)
+<br>- [Vault.js](#Vault.js) (Required)
 <br>- [FullEmojiList.js](https://github.com/DragonFireGames/Fire-Chat-Room/blob/main/libraries/FullEmojiList.js) (Optional)
 
 <h3>Libraries</h3>
