@@ -7,7 +7,7 @@ projects and attached as gamelab libraries to the main projects.
 
 FCR.js -> Original FCR in all its glory<br>
 Dependencies:
-- Vault.js (Optional, Strongly recommended)
+\- Vault.js (Optional, Strongly recommended)
 - FullEmojiList.js (Optional)
 
 FCR2.js -> New Version of FCR which uses the cdo-backend<br>
