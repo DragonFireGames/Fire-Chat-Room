@@ -8,7 +8,7 @@ These are the main projects which you will attach the libraries to.
 
 [FCR.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/FCR.js) -> Original FCR in all its glory<br>
 Dependencies:
-<br>- [Vault.js](#Vault) (Optional, Strongly recommended)
+<br>- [Vault.js](#vault) (Optional, Strongly recommended)
 <br>- [FullEmojiList.js](#FullEmojiList) (Optional)
 
 [FCR2.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/FCR2.js) -> New Version of FCR which uses the cdo-backend<br>
@@ -26,6 +26,6 @@ Post these with the same name as the file and attach them to the projects.
 
 [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FKEY.js) -> Reworks KeyValues and connects to the [cdo-backend](https://github.com/DragonFireGames/cdo-backend) {#FKEY}
 
-[Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) -> Prevents people from using the gamelab console to hack projects {#Vault}
+[Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) -> Prevents people from using the gamelab console to hack projects {#vault}
 
 [FullEmojiList.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FullEmojiList.js) -> A large list of emojis {#FullEmojiList}
