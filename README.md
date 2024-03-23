@@ -26,6 +26,6 @@ Publish these with the same name as the file and attach them to the projects or 
 
 [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FKEY.js) -> Reworks KeyValues and connects to the [cdo-backend](https://github.com/DragonFireGames/cdo-backend)
 
-[Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) -> Prevents people from using the gamelab console to hack projects
+[Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) -> Prevents people from using the gamelab console to "hack" projects
 
 [FullEmojiList.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FullEmojiList.js) -> A large list of emojis
