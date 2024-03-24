@@ -11,7 +11,7 @@ Dependencies:
 <br>- [Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) (Optional, Strongly recommended)
 <br>- [FullEmojiList.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FullEmojiList.js) (Optional)
 
-[FCR2.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/FCR2.js) -> New Version of FCR which uses the cdo-backend<br>
+[FCR2.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/FCR2.js) -> New Version of FCR which uses the [cdo-backend](https://github.com/DragonFireGames/cdo-backend)<br>
 Dependencies:
 <br>- [FGUI.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FGUI.js) (Required)
 <br>- [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FKEY.js) (Required)
