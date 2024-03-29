@@ -1,38 +1,14 @@
-/* Credits - PLEASE DO NOT REMOVE
+var FTEMP = (function(){
 
- - Project: Fire Chat Room 2.0
- - Credit: Developed By DragonFireGames
- - Remixer: (Your name)
- - Version: Beta Release 0.4.1
-
- My contact info:
- - Discord: DragonFire7z
- - Email: dragonfire7z@outlook.com
- contact me if you want.
- 
- PS; Please contact me cool.
- 
- PS; Thanks to @MonsterYT for helping me debug.
-     Thanks to @cool for inspiring me to make a chat.
-     Thanks to @Rocky for inspiring sounds.
-     Big Thanks to @Varrience & @Owokoyo for the JSON request mechanics.
-     Big Thanks to @Ravage for Vault
-
- Be sure to check out my other games:
-
- Pumpkin Smasher 2:
- URL - https://pumpkin-smasher.onrender.com
- Server - https://discord.gg/NqnXXy8mNz
- 
- Also check out the game lab forum
- https://gamelab.freeflarum.com
-
-*/
+// FTEMP Fire Template
+// By: DragonFireGames
+// Version: 1.0
+// Description: A template for future projects
 
 // Settings
-var ownerName = "DragonFireGames";
-var projectName = false;
-var featuredLinks = { // Personalized Links
+window.ownerName = "DragonFireGames";
+window.projectName = false;
+window.featuredLinks = { // Personalized Links
   "The Pumpkin Smasher Discord Server":"https://discord.gg/NqnXXy8mNz",
   "Pumpkin Smasher":"https://pumpkin-smasher.onrender.com",
   "My Google Site":"https://sites.google.com/view/dragonfiregames/home",
@@ -45,12 +21,12 @@ var featuredLinks = { // Personalized Links
 
 // Sign in
 
-var user = Client();
+window.user = Client();
 constant("userId",getUserId());
 
 //  UI SECTION
 
-var themeList = [
+window.themeList = [
   {
     name:"Default",
     creator:"DragonFireGames",
@@ -77,6 +53,7 @@ var themeList = [
     warning_buttons:"#401010",
     warning_button_hover:"#502020",
     notifications: "#333333",
+    notification_stroke: false,
     announcement: "#e9e9e9",
     date: "#777777",
     placeholder: "#777777",
@@ -368,7 +345,7 @@ var themeList = [
     bevel: 5,
   },
 ];
-var selTheme = 0;
+window.selTheme = 0;
 
 // Process themes
 for (var i = 0; i < themeList.length; i++) {
@@ -379,9 +356,9 @@ for (var i = 0; i < themeList.length; i++) {
   }
 }
 
-var activeSounds = {};
-var theme;
-function selectTheme(sel) {
+window.activeSounds = {};
+window.theme = {};
+window.selectTheme = function(sel) {
   sel += themeList.length;
   sel %= themeList.length;
   selTheme = sel;
@@ -421,6 +398,7 @@ function selectTheme(sel) {
   c("input_box_typing","input_box_hover");
   c("input_box","buttons");
   c("notifications","buttons");
+  c("notification_stroke","button_stroke");
   c("announcement","text");
   c("date","placeholder","text");
   c("placeholder","date");
@@ -434,7 +412,7 @@ function selectTheme(sel) {
 }
 selectTheme(selTheme);
 
-var buttonStyler = {};
+window.buttonStyler = {};
 buttonStyler.style = createStyle(false,{
   fill:function(){return theme.buttons;},
   textFill:function(){return theme.button_text;},
@@ -453,7 +431,7 @@ buttonStyler.hoverStyle = createStyle(buttonStyler.style,{
 });
 buttonStyler.clickStyle = buttonStyler.hoverStyle;
 
-var warningButtonStyler = {};
+window.warningButtonStyler = {};
 warningButtonStyler.style = createStyle(buttonStyler.style,{
   fill:function(){return theme.warning_buttons;},
 });
@@ -462,7 +440,7 @@ warningButtonStyler.hoverStyle = createStyle(buttonStyler.hoverStyle,{
 });
 warningButtonStyler.clickStyle = warningButtonStyler.hoverStyle;
 
-var inputStyler = {};
+window.inputStyler = {};
 inputStyler.style = createStyle(buttonStyler.style,{
   horizAlign:"left",
   vertAlign:"top",
@@ -477,7 +455,7 @@ inputStyler.clickStyle = createStyle(inputStyler.hoverStyle,{
 });
 inputStyler.activeStyle = inputStyler.clickStyle;
 
-var panelStyler = {};
+window.panelStyler = {};
 panelStyler.style = createStyle(buttonStyler.style,{
   fill:function(){return theme.panel;},
   stroke:function(){return theme.panel_stroke;}
@@ -488,37 +466,25 @@ panelStyler.hoverStyle = createStyle(inputStyler.style,{
 });
 panelStyler.clickStyle = panelStyler.hoverStyle;
 
-/*
-var textButtonStyle = createStyle(buttonStyle,{
+window.textButtonStyler = {};
+textButtonStyler.style = createStyle(buttonStyler.style,{
   fill:alpha(0,0),
   stroke:false,
   textSize:20,
 });
-var textButtonHoverStyle = createStyle(textButtonStyle,{
+textButtonStyler.hoverStyle = createStyle(buttonStyler.hoverStyle,{
   //textStroke:"#fbfbfb",
   //textStrokeWeight:1,
   textShadow:"#fbfbfb",
   textShadowBlur:10,
+  fill:alpha(0,0),
+  stroke:false,
+  textSize:20,
 });
-*/
-
-var PAGES = [
-  "loading",
-  "signupin",
-  "home",
-  "friends",
-  "profile",
-  "shop",
-  "adminpanel",
-  "chatroom",
-  "editgc"
-];
-PAGES.forEach(function(e){
-  createPage(e);
-});
+textButtonStyler.clickStyle = textButtonStyler.hoverStyle;
 
 // Custom
-function createListDiv(label,x,y,width,height,page) {
+window.createListDiv = function(label,x,y,width,height,page) {
   var div = createElement(x,y,width,height,page);
   div.addComponent("div");
   div.addComponent("button");
@@ -572,7 +538,7 @@ function createListDiv(label,x,y,width,height,page) {
         break;
       }
       var data = div.showlist[i];
-      var hover = b.mouseRect(5,5,div.width-10,30);
+      var hover = div.hover && b.mouseRect(5,5,div.width-10,30);
       if (hover) {
         cursor(HAND);
         b.format(theme.button_hover,theme.button_stroke_hover);
@@ -629,14 +595,14 @@ function createListDiv(label,x,y,width,height,page) {
   div.reset();
   return div;
 }
-function createButton(text,x,y,width,height,page) {
+window.createButton = function(text,x,y,width,height,page) {
   var btn = createElement(x,y,width,height,page);
   btn.addComponent("button");
   if (text) btn.addComponent("text",text);
   btn.setStyles(buttonStyler);
   return btn;
 }
-function createInput(placeholder,x,y,width,height,page) {
+window.createInput = function(placeholder,x,y,width,height,page) {
   var inp = createElement(x,y,width,height,page);
   inp.addComponent("input");
   inp.setStyles(inputStyler);
@@ -648,11 +614,19 @@ function createInput(placeholder,x,y,width,height,page) {
 // Loading
 // -------
 
+createPage("loading");
 setPage("loading");
 window.onserverload = function() {
   setPage("signupin");
   user.checkIn(function(){
     setPage("home");
+  });
+  user.referAuth(function(){
+    setPage("home");
+    var params = getURLParams();
+    if (params.notify) {
+      handleNotification(JSON.parse(decodeURIComponent(params.notify)));
+    }
   });
 };
 
@@ -665,7 +639,8 @@ pageMap.loading.before = function() {
 // Sign Up/In
 // ----------
 
-var accInput = createInput("Enter account name.",100,200,200,22,"signupin");
+createPage("signupin");
+window.accInput = createInput("Enter account name.",100,200,200,22,"signupin");
 accInput.validateinput = function(e) {
   if (e == "\n") {
     activeElement = pswInput;
@@ -674,7 +649,7 @@ accInput.validateinput = function(e) {
   }
 }
 
-var pswInput = createInput("Enter a password.",100,225,200,22,"signupin");
+window.pswInput = createInput("Enter a password.",100,225,200,22,"signupin");
 pswInput.password = true;
 pswInput.validateinput = function(e) {
   if (e == "\n") {
@@ -683,7 +658,7 @@ pswInput.validateinput = function(e) {
   }
 }
 
-var feedbackSignText = {t:"",f:"#FF0000"};
+window.feedbackSignText = {t:"",f:"#FF0000"};
 feedbackSignText.draw = function(){
   fill(this.f);
   textSize(12);
@@ -696,7 +671,7 @@ feedbackSignText.setText = function(t){
   this.tm = setTimeout(function(){this.t=""}.bind(this),5000);
 };
 
-var signUpButton = createButton("Sign Up",100,250,98.5,22,"signupin");
+window.signUpButton = createButton("Sign Up",100,250,98.5,22,"signupin");
 signUpButton.onclick = function(){
   if(!pswInput.value){
     feedbackSignText.setText("Enter a password.");
@@ -714,7 +689,7 @@ signUpButton.onclick = function(){
   });
 };
 
-var logInButton = createButton("Log In",201.5,250,98.5,22,"signupin");
+window.logInButton = createButton("Log In",201.5,250,98.5,22,"signupin");
 logInButton.onclick = function(){
   if(!pswInput.value){
     feedbackSignText.setText("Enter a password.");
@@ -732,7 +707,7 @@ logInButton.onclick = function(){
   });
 };
 
-project = loadProject(projectId);
+window.project = loadProject(projectId);
 setInterval(function(){
   loadProjectAbuse(projectId,function(abuse){
     if (abuse.abuse_score == 0 && !abuse.sharing_disabled) return;
@@ -779,7 +754,7 @@ pageMap.signupin.after = function(){
 // Tabs
 // ----
 
-var tabStyler = {};
+window.tabStyler = {};
 tabStyler.style = createStyle(buttonStyler.style,{fill:function(){return theme.messages;}});
 tabStyler.hoverStyle = createStyle(buttonStyler.style,{fill:function(){return theme.message_hover;}});
 tabStyler.clickStyle = tabStyler.hoverStyle;
@@ -787,60 +762,625 @@ tabStyler.styleOn = buttonStyler.style;
 tabStyler.hoverStyleOn = buttonStyler.hoverStyle;
 tabStyler.clickStyleOn = buttonStyler.hoverStyle;
 
-var tabPages = {
-  "home":"Chats",
+window.tabPages = {
   "friends":"Friends",
   "profile":"Account",
   "shop":"Shop",
   "adminpanel":"Admin"
 };
-var tabX = 5;
-var tabList = {};
-function createTab(page,name) {
-  var tab = createElement(tabX,5,20,20);
-  tab.addComponent("toggle");
-  tab.addComponent("text",name);
-  tab.setStyles(tabStyler);
-  tab.onclick = function() {
-    for (var i in tabList) {
-      tabList[i].toggle = false;
+setTimeout(function(){
+  var tabX = 5;
+  window.tabList = {};
+  function createTab(page,name) {
+    var tab = createElement(tabX,5,20,20);
+    tab.addComponent("toggle");
+    tab.addComponent("text",name);
+    tab.setStyles(tabStyler);
+    tab.onclick = function() {
+      for (var i in tabList) {
+        tabList[i].toggle = false;
+      }
+      tab.toggle = true;
+      if (activePage.name == page) return;
+      setPage(page);
     }
-    tab.toggle = true;
-    if (activePage.name == page) return;
-    setPage(page);
+    textSize(tab.style.textSize);
+    tab.width = textWidth(name)+20;
+    tabX += tab.width+5;
+    for (var i in tabPages) {
+      tab.addToPage(i);
+    }
+    return tab;
   }
-  textSize(tab.style.textSize);
-  tab.width = textWidth(name)+20;
-  tabX += tab.width+5;
   for (var i in tabPages) {
-    tab.addToPage(i);
+    tabList[i] = createTab(i,tabPages[i]);
   }
-  return tab;
-}
-for (var i in tabPages) {
-  tabList[i] = createTab(i,tabPages[i]);
-}
-tabList.home.toggle = true;
-tabList.adminpanel.x = 395-tabList.adminpanel.width;
-tabList.adminpanel.adminclick = tabList.adminpanel.onclick;
-tabList.adminpanel.onclick = function() {
-  if (user.isAdmin) {
-    tabList.adminpanel.adminclick();
-  } else {
-    user.elevate(prompt("Enter admin password:"),function(v){
+  tabList[Object.keys(tabPages)[0]].toggle = true;
+  tabList.adminpanel.x = 395-tabList.adminpanel.width;
+  tabList.adminpanel.adminclick = tabList.adminpanel.onclick;
+  tabList.adminpanel.onclick = function() {
+    if (user.isAdmin) {
       tabList.adminpanel.adminclick();
-    },function(e) {
-      prompt(e.slice(7));
-    });
-    tabList.adminpanel.toggle = false;
+    } else {
+      user.elevate(prompt("Enter admin password:"),function(v){
+        tabList.adminpanel.adminclick();
+      },function(e) {
+        prompt(e.slice(7));
+      });
+      tabList.adminpanel.toggle = false;
+    }
+  };
+},0);
+createPage("adminpanel");
+
+// ----
+// Shop
+// ----
+
+createPage("shop");
+pageMap.shop.before = function() {
+  format(theme.announcement,false,0,14,LEFT,TOP);
+  text("You have Ⓒ "+user.balance+":",10,30);
+  format(theme.announcement,false,0,24,CENTER,CENTER);
+  text("Daily Item Shop\nComing Soon...",200,100);
+  translate(0,286);
+  format(theme.date,false,0,12,LEFT,BOTTOM);
+  //text("Use CRTL+LEFT or CTRL+RIGHT to shift themes",0,1)
+  text("Your Purchased Themes:",1,1)
+  drawThemes();
+  translate(0,-286);
+};
+window.drawThemes = function() {
+  push();
+  fill(theme.panel);
+  rect(0,0,400,114,theme.bevel);
+  translate(150,0);
+  var keys = Object.keys(themeList);
+  var size = {
+    "-2":50,
+    "-1":80,
+    "0":100,
+    "1":80,
+    "2":50,
+  };
+  translate(-50-80-14,0)
+  for (var i = -2; i <= +2; i++) {
+    var t = themeList[keys[(i+selTheme+keys.length) % keys.length]];
+    var s = size[i]/100;
+    var h = 50*(1-s)/s;
+    format(t.background,t.stroke,1);
+    scale(s,s);
+    if (t.background_image && t.background_image.width > 1) {
+      noFill();
+      beveledImage(t.background_image,0,7/s+h,100,100,t.bevel);
+    }
+    rect(0,7/s+h,100,100,t.bevel);
+    textAlign(CENTER,BOTTOM);
+    textSize(16);
+    noStroke();
+    fill(t.announcement);
+    textFont(t.font || "Verdana");
+    textStyle(t.text_style || NORMAL);
+    text(t.name,50,60+h);
+    textAlign(CENTER,TOP);
+    textSize(8);
+    text("By: "+t.creator,50,60+h);
+    translate(100+7/s,0);
+    scale(1/s,1/s);
+  }
+  pop();
+  var button = function(x,l,a) {
+    push();
+    var hover = mouseRect(x,0,30,114);
+    if (hover) {
+      cursor(HAND);
+      format(theme.button_hover,theme.button_stroke_hover);
+    } else {
+      format(theme.buttons,theme.button_stroke);
+    }
+    rect(x,0,30,114,theme.bevel);
+    if (hover) fill(theme.button_text_hover);
+    else fill(theme.button_text);
+    textAlign(CENTER,CENTER);
+    textSize(30);
+    text(l,x+15,57+2);
+    if (clicked && hover) {
+      selectTheme(selTheme+a);
+    }
+    pop();
+  }
+  button(0,"<",-1);
+  button(370,">",1)
+}
+
+// -------
+// Friends
+// -------
+
+createPage("friends");
+pageMap.friends.onopen = function() {
+  loadProfile(user.name,function(p) {
+    friendList.reset();
+    outgoingList.reset();
+    incomingList.reset();
+    for (var i in p.friends) (function(i){
+      loadProfile(i,function(p2){
+        p2 = onloadprofile(p2);
+        if (p2.friends[user.name]) {
+          friendList.push(p2);
+          p2.onclick = function(){
+            user.unfriend(p2.name,function(){
+              pageMap.friends.onopen();
+            });
+          };
+        } else {
+          outgoingList.push(p2);
+          p2.onclick = function(){
+            user.unfriend(p2.name,function(){
+              pageMap.friends.onopen();
+            });
+          };
+        }
+        return p2;
+      });
+    })(i);
+    for (var i in p.requests) (function(i){
+      loadProfile(i,function(p2){
+        p2 = onloadprofile(p2);
+        incomingList.push(p2);
+        p2.onclick = function(){
+          user.friend(p2.name,function(){
+            pageMap.friends.onopen();
+          });
+        };
+        return p2;
+      });
+    })(i);
+    return p;
+  });
+};
+window.friendList = createListDiv("Mutual Friends",5,30,192.5,365,"friends");
+window.outgoingList = createListDiv("Outgoing Friend Requests",202.5,30,192.5,180,"friends");
+window.incomingList = createListDiv("Incoming Friend Requests",202.5,215,192.5,180,"friends");
+
+// --------
+// Profiles
+// --------
+
+var randcol = hsv(random(0,360),random(50,100),100)._array;
+randcol = [randcol[0],randcol[1],randcol[2],1];
+randcol = randcol.map(function(v){return floor(v*255);});
+window.defaultData = {
+  color: randcol,
+  public: {
+    chats: {},
+  }
+};
+
+defaultProfile.color = [0,0,0,0];
+window.defaultAvatar = loadImage("https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg");
+window.onloadprofile = function(data) {
+  data.old = JSON.parse(JSON.stringify(data));
+  if (typeof data.avatar != 'string') return data;
+  avatarBtn.img = defaultAvatar;
+  if (data.avatar !== "default") loadImage(data.avatar,function(img) {
+    data.avatar = img;
+    if (data.public && data.name == user.name) avatarBtn.img = img;
+  });
+  data.avatar = defaultAvatar;
+  var key;
+  if (data.id) key = "last_active_"+data.id;
+  else key = "last_active_user_"+data.name;
+  getKeyValue(key,function(v){
+    data.lastActiveAt = v || 0;
+  });
+  return data;
+};
+
+// old button drawer
+window.drawButton2 = function(label,x,y,w,h,Tx,Ty,filler) {
+  var hover = mouseRect(x-(Tx||0),y-(Ty||0),w,h);
+  if (hover) {
+    cursor(HAND);
+    format(theme.button_hover,theme.button_stroke_hover);
+  } else {
+    fill(theme.buttons);
+    format(theme.buttons,theme.button_stroke);
+  }
+  if (filler) filler(hover);
+  rect(x,y,w,h,theme.bevel);
+  fill(theme.text);
+  noStroke();
+  textAlign(CENTER,CENTER)
+  text(label,x+w/2,y+h/2);
+  //if (hover && clicked) playSound(clickSound);
+  return hover;
+}
+
+// Draw profiles
+window.drawProfileButtons = function(prof) {}
+window.drawProfileScreen = function(prof) {
+  if (!prof.displayname) return;
+  var h = 390;
+  if (prof.name == user.name) h -= 30;
+  fill("#202020");
+  rect(5,5,190,h,5);
+  fill(prof.color);
+  rect(5,5,190,60,5,5,0,0);
+  fill("#202020");
+  ellipse(50,60,60,60);
+  fill("#101010");
+  rect(10,90,180,270,5);
+  format(255,false,0,18,LEFT,TOP);
+  text(prof.displayname,15,92);
+  textSize(12);
+  text(prof.name,15,110);
+  
+  var coins = "Ⓒ "+prof.coins;
+  text(coins,80,72.5);
+  
+  push();
+  translate(0,130);
+  
+  textSize(10);
+  textStyle(BOLD);
+  text("ABOUT ME",15,0);
+  translate(0,12.5);
+  
+  textSize(12);
+  textStyle(NORMAL);
+  text(prof.bio,15,0,180);
+  translate(0,getLines(prof.bio,180).length*15);
+  
+  textSize(10);
+  textStyle(BOLD);
+  text("FCR MEMBER SINCE",15,0);
+  translate(0,12.5);
+  
+  textSize(12);
+  textStyle(NORMAL);
+  text(new Date(prof.joinedAt||0).toString(),15,0,180);
+  pop();
+  
+  var hover = mouseEllipse(50,60,50,50);
+  //var rad = hover ? 52 : 50;
+  var rad = 50;
+  coloredAvatarImage(prof,50,60,rad);
+  if (hover && mouseWentDown("left")) {
+    prompt("Avatar image:",prof.old.avatar);
+  }
+  
+  if (prof.name == user.name) return;
+  
+  drawProfileButtons(prof);
+  
+  var str = "+";
+  if (prof.requests[user.name]) str = "-";
+  var hoverfriend = drawButton2(str,165,365,25,25,0,0);
+  if (hoverfriend && clicked) {
+    if (str == "+") user.friend(prof.name);
+    else user.unfriend(prof.name);
   }
 }
+
+_bindGraphicsMethod("coloredAvatarImage",function(prof,x,y,rad) {
+  this.avatarImage(prof.avatar,"circle",x,y,rad);
+  var c = prof.color;
+  if (prof.avatar == defaultAvatar && typeof c == 'object' && c instanceof Array) {
+    this.noStroke();
+    this.fill(alpha(c,0.5));
+    this.ellipse(x,y,rad,rad);
+  }
+  if (theme.avatar_stroke || theme.avatar_stroke === 0) {
+    this.noFill();
+    this.stroke(theme.avatar_stroke);
+    this.ellipse(x,y,rad,rad);
+  }
+});
+
+// -------
+// Account
+// -------
+
+createPage("profile");
+var profile;
+pageMap.profile.onopen = function() {
+  nameInput.placeholder = user.name;
+  loadProfile(user.name,function(data){
+    profile = data;
+    nameInput.value = profile.displayname;
+    nameInput.update();
+    bioInput.value = profile.bio;
+    bioInput.update();
+    colorBtn.style.fill = color(profile.color||128);
+  });
+};
+pageMap.profile.before = function() {
+  if (!profile) return;
+  format(255,false,0,12,LEFT);
+  text("Display Name:",12.5,37.5);
+  text("Color:",12.5,77.5);
+  text("Avatar:",12.5,117.5);
+  text("About Me:",12.5,207.5);
+  
+  textSize(12);
+  
+  translate(200,27.5);
+  drawProfileScreen(profile);
+  translate(-200,-27.5);
+};
+
+window.nameInput = createInput(false,7.5,43.5,190,22,"profile");
+nameInput.validateinput = function(e) {
+  if (e == "\n") return false;
+};
+nameInput.onchange = function() {
+  user.update({displayname:nameInput.value||user.name});
+};
+
+window.colorBtn = createButton(false,7.5,83.5,190,22,"profile");
+colorBtn.hoverStyle = colorBtn.style;
+colorBtn.clickStyle = colorBtn.style;
+colorBtn.onclick = function() {
+  var col = colorBtn.style.fill.toString();
+  var ncol = prompt("Paste hex of color: ",col) || col;
+  try {
+    var c = color(ncol);
+    ncol = c._array;
+    ncol = [ncol[0],ncol[1],ncol[2],1];
+    ncol = ncol.map(function(v){return floor(v*255);});
+    user.update({color:ncol});
+    colorBtn.style.fill = color(c);
+  } catch(e) {}
+};
+
+window.avatarBtn = createButton(false,7.5,123.5,190,72,"profile");
+avatarBtn.addComponent("image",defaultAvatar);
+avatarBtn.onclick = function() {
+  var url = profile.avatarurl;
+  if (url === "default") url = "";
+  var nurl = prompt("Paste image: ",url);
+  if (nurl === null) {
+    user.update({avatar:"default"});
+    avatarBtn.img = defaultAvatar;
+  }
+  if (!nurl) return;
+  loadImage(nurl,function(img) {
+    user.update({avatar:nurl});
+    avatarBtn.img = img;
+  });
+};
+
+window.bioInput = createInput(false,7.5,213.5,190,149,"profile");
+bioInput.onchange = function() {
+  user.update({bio:bioInput.value});
+};
+
+window.signOutButton = createButton("Sign Out",7.5,369,87.5,22.5,"profile");
+signOutButton.onclick = function() {
+  user.signOut(function(){
+    tabList.home.click();
+    setPage("signupin");
+  });
+};
+
+window.deleteAccButton = createButton("Delete Acc",100,369,97.5,22.5,"profile");
+deleteAccButton.setStyles(warningButtonStyler);
+deleteAccButton.onclick = function() {
+  var cred = prompt("Enter password to confirm deletion:","");
+  if (!cred) return;
+  user.delete(cred,function(){
+    tabList.home.click();
+    setPage("signupin");
+  },prompt);
+};
+
+// ----
+// Draw
+// ----
+
+window.clicked = false;
+window.viewProfile = false;
+// Draw Function
+function draw() {
+  background(theme.background);
+  if (theme.background_image) {
+    image(theme.background_image,0,0,400,400);
+  }
+  clicked = mouseWentDown("left");
+  FGUI.draw();
+  if (viewProfile) {
+    translate(200,0);
+    drawProfileScreen(viewProfile);
+    if (clicked && !mouseRect(5,5,190,390,5)) {
+      viewProfile = false;
+    }
+    translate(-200,0);
+  }
+  var notify = user.data && user.data.public.notify;
+  notification.visible = notify;
+}
+
+// -------------
+// Notifications
+// -------------
+
+setInterval((function notify(){
+  if (user.name) loadProfile(user.name);
+  return notify;
+})(),30000);
+
+window.notifyUser = function(name,header,content,data) {
+  if (!profileCache[name]) return;
+  var obj = {};
+  obj.project = getURLPath()[2];
+  obj.date = Date.now();
+  obj.header = header;
+  obj.content = content;
+  obj.data = data;
+  user.updatepublic(name,{
+    notify:obj
+  });
+}
+
+window.notification = createElement(5,5,200,100);
+notification.style = createStyle(buttonStyler.style,{
+  fill: function(){return theme.notifications;},
+  stroke: function(){return theme.notification_stroke;},
+});
+notification.addComponent("button");
+notification.content = function() {
+  var notify = user.data.public.notify;
+  if (!notify) return;
+  format(theme.announcement,false,0,15,LEFT,TOP);
+  text(notify.header||"(undefined)",this.x+5,this.y+5,this.width-10);
+  var h = textBounds(notify.header||"(undefined)",this.width-10).height;
+  format(theme.text,false,0,12,LEFT,TOP);
+  text(notify.content||"",this.x+5,this.y+h+5,this.width-10);
+  var h2 = textBounds(notify.content||"",this.width-10).height;
+  textAlign(CENTER,CENTER);
+  var s = mouseEllipse(this.x+this.width-12.5,this.y+12.5,15,15)*2;
+  if (s) cursor(HAND);
+  textSize(12+s);
+  text("X",this.x+this.width-12.5,this.y+13.5);
+  format(false,theme.text,1);
+  ellipse(this.x+this.width-12.5,this.y+12.5,15+s,15+s);
+  this.height = h+h2+5;
+};
+window.handleNotification = function() {};
+notification.onclick = function() {
+  var notify = user.data.public.notify;
+  var s = mouseEllipse(this.x+this.width-12.5,this.y+12.5,15,15)*2;
+  user.updatepublic(user.name,{
+    notify:null
+  });
+  if (s) return;
+  if (notify.project == getURLPath()[2]) {
+    handleNotification(notify.data);
+  } else {
+    user.refer(notify.project,false,"&notify="+encodeURIComponent(JSON.stringify(notify.data)));
+  }
+}
+notification.changecursor = false;
+notification.drawers.push("content");
+notification.visible = false;
+setTimeout(function(){
+  for (var i in pageMap) {
+    pageMap[i].addElement(notification);
+  }
+},0);
+
+// Misc
+
+window.date = function(time) {
+  
+  var seconds = (Date.now() - time) / 1000;
+
+  if (time == 0) return "never";
+
+  var interval = floor(seconds / (365.25 * 24 * 60 * 60));
+  if (interval == 1) return "1 year ago";
+  else if (interval > 1) return interval + " years ago";
+  
+  interval = floor(seconds / (30.4375 * 24 * 60 * 60));
+  if (interval == 1) return "1 month ago";
+  else if (interval > 1) return interval + " months ago";
+  
+  interval = floor(seconds / (7 * 24 * 60 * 60));
+  if (interval == 1) return "1 week ago";
+  else if (interval > 1) return interval + " weeks ago";
+  
+  interval = floor(seconds / (24 * 60 * 60));
+  if (interval == 1) return "1 day ago";
+  else if (interval > 1) return interval + " days ago";
+  
+  interval = floor(seconds / (60 * 60));
+  if (interval == 1) return "1 hour ago";
+  else if (interval > 1) return interval + " hours ago";
+  
+  interval = floor(seconds / (60));
+  if (interval == 1) return "1 minute ago";
+  else if (interval > 1) return interval + " minutes ago";
+  
+  interval = floor(seconds);
+  if (interval == 1) return "1 second ago";
+  return interval + " seconds ago";
+  
+  //return new Date(time).toUTCString();
+}
+
+//Coins
+setInterval((function coins(){
+  for (var i = 0; i < 10; i++) setTimeout(function() {
+    if (Date.now()-_lastEventTime >= 1000) return;
+    if (!user.data) return;
+    user.balance += 0.1;
+  },random()*60000);
+  return coins;
+})(),60000);
+//Activity
+setInterval((function active(){
+  if (!user.name) return active;
+  setKeyValue("last_active_user_"+user.name,Date.now());
+  return active;
+})(),15000);
+
+return {draw:draw};
+})();
+
+/* Credits - PLEASE DO NOT REMOVE
+
+ - Project: Fire Chat Room 2.0
+ - Credit: Developed By DragonFireGames
+ - Remixer: (Your name)
+ - Version: Beta Release 0.5.0
+
+ My contact info:
+ - Discord: DragonFire7z
+ - Email: dragonfire7z@outlook.com
+ contact me if you want.
+ 
+ PS; Please contact me cool.
+ 
+ PS; Thanks to @MonsterYT for helping me debug.
+     Thanks to @cool for inspiring me to make a chat.
+     Thanks to @Rocky for inspiring sounds.
+     Big Thanks to @Varrience & @Owokoyo for the JSON request mechanics.
+     Big Thanks to @Ravage for Vault
+
+ Be sure to check out my other games:
+
+ Pumpkin Smasher 2:
+ URL - https://pumpkin-smasher.onrender.com
+ Server - https://discord.gg/NqnXXy8mNz
+ 
+ Also check out the game lab forum
+ https://gamelab.freeflarum.com
+
+*/
+
+/*
+window.ownerName = "Your Name";
+window.projectName = false; // Put project name here if u want
+window.featuredLinks = { // Personalized Links
+  "link1":"https://example.com",
+};
+//*/
+
+window.tabPages = {
+  "home":"Home",
+  "friends":"Friends",
+  "profile":"Account",
+  "shop":"Shop",
+  "adminpanel":"Admin"
+};
 
 // -----------
 // Home Screen
 // -----------
 
 roomMap = {};
+createPage("home");
 pageMap.home.onopen = function() {
   getRoomList(function(map){
     roomMap = map;
@@ -887,7 +1427,7 @@ roomlistdiv.beforedraw = function(b) {
   var map = JSON.parse(JSON.stringify(roomMap));
   //*if (user.isAdmin || EVERYONE_CAN_MAKE_ROOMS)*/ map["___MakeRoom___"] = true;
   for (var i in map) {
-    var hover = b.mouseRect(5,5,160,20);
+    var hover = roomlistdiv.hover && b.mouseRect(5,5,160,20);
     if (hover) {
       cursor(HAND);
       b.format(theme.button_hover,theme.button_stroke_hover);
@@ -1014,6 +1554,7 @@ addgcbtn.onclick = function() {
 // Edit GC
 // -------
 
+createPage("editgc");
 var editingGC = false;
 var memberList = createListDiv("Members",5,140,192.5,225,"editgc");
 var nonmemberList = createListDiv("People",202.5,5,192.5,360,"editgc");
@@ -1057,7 +1598,6 @@ pageMap.editgc.after = function() {
   text("Display Name:",12.5,12.5);
   text("Display Image:",12.5,55.5);
 };
-
 
 var leavebtn = createButton("Exit Editor Menu",5,370,192.5,25,"editgc");
 leavebtn.onclick = function() {
@@ -1107,140 +1647,11 @@ gcavatarBtn.onclick = function() {
   });
 };
 
-// ----
-// Shop
-// ----
-
-pageMap.shop.before = function() {
-  format(theme.announcement,false,0,14,LEFT,TOP);
-  text("You have Ⓒ "+user.balance+":",10,30);
-  format(theme.announcement,false,0,24,CENTER,CENTER);
-  text("Daily Item Shop\nComing Soon...",200,100);
-  translate(0,286);
-  format(theme.date,false,0,12,LEFT,BOTTOM);
-  //text("Use CRTL+LEFT or CTRL+RIGHT to shift themes",0,1)
-  text("Your Purchased Themes:",1,1)
-  drawThemes();
-  translate(0,-286);
-};
-
-function drawThemes() {
-  push();
-  fill(theme.panel);
-  rect(0,0,400,114,theme.bevel);
-  translate(150,0);
-  var keys = Object.keys(themeList);
-  var size = {
-    "-2":50,
-    "-1":80,
-    "0":100,
-    "1":80,
-    "2":50,
-  };
-  translate(-50-80-14,0)
-  for (var i = -2; i <= +2; i++) {
-    var t = themeList[keys[(i+selTheme+keys.length) % keys.length]];
-    var s = size[i]/100;
-    var h = 50*(1-s)/s;
-    format(t.background,t.stroke,1);
-    scale(s,s);
-    if (t.background_image && t.background_image.width > 1) {
-      noFill();
-      beveledImage(t.background_image,0,7/s+h,100,100,t.bevel);
-    }
-    rect(0,7/s+h,100,100,t.bevel);
-    textAlign(CENTER,BOTTOM);
-    textSize(16);
-    noStroke();
-    fill(t.announcement);
-    textFont(t.font || "Verdana");
-    textStyle(t.text_style || NORMAL);
-    text(t.name,50,60+h);
-    textAlign(CENTER,TOP);
-    textSize(8);
-    text("By: "+t.creator,50,60+h);
-    translate(100+7/s,0);
-    scale(1/s,1/s);
-  }
-  pop();
-  var button = function(x,l,a) {
-    push();
-    var hover = mouseRect(x,0,30,114);
-    if (hover) {
-      cursor(HAND);
-      format(theme.button_hover,theme.button_stroke_hover);
-    } else {
-      format(theme.buttons,theme.button_stroke);
-    }
-    rect(x,0,30,114,theme.bevel);
-    if (hover) fill(theme.button_text_hover);
-    else fill(theme.button_text);
-    textAlign(CENTER,CENTER);
-    textSize(30);
-    text(l,x+15,57+2);
-    if (clicked && hover) {
-      selectTheme(selTheme+a);
-    }
-    pop();
-  }
-  button(0,"<",-1);
-  button(370,">",1)
-}
-
-// -------
-// Friends
-// -------
-
-pageMap.friends.onopen = function() {
-  loadProfile(user.name,function(p) {
-    friendList.reset();
-    outgoingList.reset();
-    incomingList.reset();
-    for (var i in p.friends) (function(i){
-      loadProfile(i,function(p2){
-        p2 = onloadprofile(p2);
-        if (p2.friends[user.name]) {
-          friendList.push(p2);
-          p2.onclick = function(){
-            user.unfriend(p2.name,function(){
-              pageMap.friends.onopen();
-            });
-          };
-        } else {
-          outgoingList.push(p2);
-          p2.onclick = function(){
-            user.unfriend(p2.name,function(){
-              pageMap.friends.onopen();
-            });
-          };
-        }
-        return p2;
-      });
-    })(i);
-    for (var i in p.requests) (function(i){
-      loadProfile(i,function(p2){
-        p2 = onloadprofile(p2);
-        incomingList.push(p2);
-        p2.onclick = function(){
-          user.friend(p2.name,function(){
-            pageMap.friends.onopen();
-          });
-        };
-        return p2;
-      });
-    })(i);
-    return p;
-  });
-};
-
-var friendList = createListDiv("Mutual Friends",5,30,192.5,365,"friends");
-var outgoingList = createListDiv("Outgoing Friend Requests",202.5,30,192.5,180,"friends");
-var incomingList = createListDiv("Incoming Friend Requests",202.5,215,192.5,180,"friends");
-
 // ---------
 // Chat Room
 // ---------
 
+createPage("chatroom");
 var exitbtn = createButton("Exit",5,5,60,20,"chatroom");
 exitbtn.onclick = function() {
   setPage("home");
@@ -1275,6 +1686,10 @@ function sendMessage() {
     currentRoom.editMsg(editingMessage);
     editingMessage = false;
   } else {
+    var matches = input.value.match(/(?<=\@)[^\s]+/g);
+    for (var i = 0; i < matches.length; i++) {
+      notifyUser(matches[i].toLowerCase(),user.data.displayname+" mentioned you!",input.value,{room:currentRoom.name});
+    }
     currentRoom.sendMsg({
       sender: user.name,
       msg: input.value,
@@ -1300,6 +1715,13 @@ input.validateinput = function(e) {
   }
 };
 input.onmobile = sendMessage;
+
+window.handleNotification = function(data) {
+  if (data.room) {
+    setPage("chatroom");
+    setRoom(data.room);
+  }
+};
 
 // Inserts
 var insertbtn = createElement(378,378,20,20,"chatroom");
@@ -1329,8 +1751,7 @@ var EMBED_HEIGHT = 100;
 var IMAGE_HEIGHT = 300;
 function drawInsert(link,onclick) {
   onclick = onclick || function(){return true;};
-  textAlign(LEFT,TOP);
-  fill(255);
+  format(theme.text,false,0,12,LEFT,TOP);
   if (link.type == "room") {
     shift(-21);
     var str = "#"+link.room;
@@ -1462,6 +1883,7 @@ function drawInsert(link,onclick) {
       } else {
         if (snd.isPlaying) {
           snd.stop();
+          delete activeSounds[link.url];
           if (Object.keys(activeSounds).length == 0) {
             if (theme.background_music) theme.background_music.play();
           }
@@ -1928,259 +2350,8 @@ function clearChat() {
   });
 }
 
-// ----
-// Draw
-// ----
-
-var clicked;
-var viewProfile = false;
-function draw() {
-  background(theme.background);
-  if (theme.background_image) {
-    image(theme.background_image,0,0,400,400);
-  }
-  clicked = mouseWentDown("left");
-  FGUI.draw();
-  if (viewProfile) {
-    translate(200,0);
-    drawProfileScreen(viewProfile);
-    if (clicked && !mouseRect(5,5,190,390,5)) {
-      viewProfile = false;
-    }
-    translate(-200,0);
-  }
-}
-
-// -------
 // Account
-// -------
-
-var prof;
-pageMap.profile.onopen = function() {
-  nameInput.placeholder = user.name;
-  loadProfile(user.name,function(data){
-    prof = data;
-    nameInput.value = prof.displayname;
-    nameInput.update();
-    bioInput.value = prof.bio;
-    bioInput.update();
-    colorBtn.style.fill = color(prof.color||128);
-  });
-};
-pageMap.profile.before = function() {
-  if (!prof) return;
-  format(255,false,0,12,LEFT);
-  text("Display Name:",12.5,37.5);
-  text("Color:",12.5,77.5);
-  text("Avatar:",12.5,117.5);
-  text("About Me:",12.5,207.5);
-  
-  textSize(12);
-  
-  translate(200,27.5);
-  drawProfileScreen(prof);
-  translate(-200,-27.5);
-};
-
-function drawProfileScreen(prof) {
-  fill("#202020");
-  rect(205,5,190,390,5);
-  fill(prof.color);
-  rect(205,5,190,60,5,5,0,0);
-  fill("#202020");
-  ellipse(250,60,60,60);
-  fill("#101010");
-  rect(210,90,180,300,5);
-  format(255,false,0,18,LEFT,TOP);
-  text(prof.displayname,215,92);
-  textSize(12);
-  text(prof.name,215,110);
-  
-  push();
-  translate(0,130);
-  
-  textSize(10);
-  textStyle(BOLD);
-  text("ABOUT ME",215,0);
-  translate(0,12.5);
-  
-  textSize(12);
-  textStyle(NORMAL);
-  text(prof.bio,215,0,180);
-  translate(0,getLines(prof.bio,180).length*15);
-  
-  textSize(10);
-  textStyle(BOLD);
-  text("FCR MEMBER SINCE",215,0);
-  translate(0,12.5);
-  
-  textSize(12);
-  textStyle(NORMAL);
-  text(new Date(prof.joinedAt||0).toString(),215,0,180);
-  pop();
-  
-  var hover = mouseEllipse(250,60,50,50);
-  //var rad = hover ? 52 : 50;
-  var rad = 50;
-  coloredAvatarImage(prof.avatar,250,60,rad);
-  if (hover && mouseWentDown("left")) {
-    prompt("Avatar image:",prof.avatarurl);
-  }
-}
-
-var nameInput = createInput(false,7.5,43.5,190,22,"profile");
-nameInput.validateinput = function(e) {
-  if (e == "\n") return false;
-};
-nameInput.onchange = function() {
-  user.update({displayname:nameInput.value||user.name});
-};
-
-var colorBtn = createButton(false,7.5,83.5,190,22,"profile");
-colorBtn.hoverStyle = colorBtn.style;
-colorBtn.clickStyle = colorBtn.style;
-colorBtn.onclick = function() {
-  var col = colorBtn.style.fill.toString();
-  var ncol = prompt("Paste hex of color: ",col) || col;
-  try {
-    var c = color(ncol);
-    ncol = c._array;
-    ncol = [ncol[0],ncol[1],ncol[2],1];
-    ncol = ncol.map(function(v){return floor(v*255);});
-    user.update({color:ncol});
-    colorBtn.style.fill = color(c);
-  } catch(e) {}
-};
-
-var avatarBtn = createButton(false,7.5,123.5,190,72,"profile");
-avatarBtn.addComponent("image",defaultAvatar);
-avatarBtn.onclick = function() {
-  var url = prof.avatarurl;
-  if (url === "default") url = "";
-  var nurl = prompt("Paste image: ",url);
-  if (nurl === null) {
-    user.update({avatar:"default"});
-    avatarBtn.img = defaultAvatar;
-  }
-  if (!nurl) return;
-  loadImage(nurl,function(img) {
-    user.update({avatar:nurl});
-    avatarBtn.img = img;
-  });
-};
-
-var bioInput = createInput(false,7.5,213.5,190,149,"profile");
-bioInput.onchange = function() {
-  user.update({bio:bioInput.value});
-};
-
-var signOutButton = createButton("Sign Out",7.5,369,87.5,22.5,"profile");
-signOutButton.onclick = function() {
-  user.signOut(function(){
-    tabList.home.click();
-    setPage("signupin");
-  });
-};
-
-var deleteAccButton = createButton("Delete Acc",100,369,97.5,22.5,"profile");
-deleteAccButton.setStyles(warningButtonStyler);
-deleteAccButton.onclick = function() {
-  var cred = prompt("Enter password to confirm deletion:","");
-  if (!cred) return;
-  user.delete(cred,function(){
-    tabList.home.click();
-    setPage("signupin");
-  },prompt);
-};
-
-// --------
-// Profiles
-// --------
-
-var randcol = hsv(random(0,360),random(50,100),100)._array;
-randcol = [randcol[0],randcol[1],randcol[2],1];
-randcol = randcol.map(function(v){return floor(v*255);});
-var defaultData = {
-  color: randcol,
-  public: {
-    chats: {},
-  }
-};
-
-defaultProfile.color = [0,0,0,0];
-var defaultAvatar = loadImage("https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg");
-window.onloadprofile = function(data) {
-  data.old = JSON.parse(JSON.stringify(data));
-  if (typeof data.avatar != 'string') return data;
-  avatarBtn.img = defaultAvatar;
-  if (data.avatar !== "default") loadImage(data.avatar,function(img) {
-    data.avatar = img;
-    if (data.public && data.name == user.name) avatarBtn.img = img;
-  });
-  data.avatar = defaultAvatar;
-  var key;
-  if (data.id) key = "last_active_"+data.id;
-  else key = "last_active_user_"+data.name;
-  getKeyValue(key,function(v){
-    data.lastActiveAt = v || 0;
-  });
-  return data;
-};
-
-// Draw profiles
-function drawProfileScreen(prof) {
-  if (!prof.displayname) return;
-  var h = 390;
-  if (prof.name == user.name) h -= 30;
-  fill("#202020");
-  rect(5,5,190,h,5);
-  fill(prof.color);
-  rect(5,5,190,60,5,5,0,0);
-  fill("#202020");
-  ellipse(50,60,60,60);
-  fill("#101010");
-  rect(10,90,180,270,5);
-  format(255,false,0,18,LEFT,TOP);
-  text(prof.displayname,15,92);
-  textSize(12);
-  text(prof.name,15,110);
-  
-  var coins = "Ⓒ "+prof.coins;
-  text(coins,80,72.5);
-  
-  push();
-  translate(0,130);
-  
-  textSize(10);
-  textStyle(BOLD);
-  text("ABOUT ME",15,0);
-  translate(0,12.5);
-  
-  textSize(12);
-  textStyle(NORMAL);
-  text(prof.bio,15,0,180);
-  translate(0,getLines(prof.bio,180).length*15);
-  
-  textSize(10);
-  textStyle(BOLD);
-  text("FCR MEMBER SINCE",15,0);
-  translate(0,12.5);
-  
-  textSize(12);
-  textStyle(NORMAL);
-  text(new Date(prof.joinedAt||0).toString(),15,0,180);
-  pop();
-  
-  var hover = mouseEllipse(50,60,50,50);
-  //var rad = hover ? 52 : 50;
-  var rad = 50;
-  coloredAvatarImage(prof,50,60,rad);
-  if (hover && mouseWentDown("left")) {
-    prompt("Avatar image:",prof.old.avatar);
-  }
-  
-  if (prof.name == user.name) return;
-  
+window.drawProfileButtons = function() {
   var hover = drawButton2("Message User",10,365,150,25,0,0);
   if (hover && clicked) {
     var msg = false;
@@ -2203,72 +2374,17 @@ function drawProfileScreen(prof) {
     setPage("chatroom");
     setRoom(msg.id);
   }
-  
-  var str = "+";
-  if (prof.requests[user.name]) str = "-";
-  var hoverfriend = drawButton2(str,165,365,25,25,0,0);
-  if (hoverfriend && clicked) {
-    if (str == "+") user.friend(prof.name);
-    else user.unfriend(prof.name);
-  }
 }
 
-_bindGraphicsMethod("coloredAvatarImage",function(prof,x,y,rad) {
-  this.avatarImage(prof.avatar,"circle",x,y,rad);
-  var c = prof.color;
-  if (prof.avatar == defaultAvatar && typeof c == 'object' && c instanceof Array) {
-    this.noStroke();
-    this.fill(alpha(c,0.5));
-    this.ellipse(x,y,rad,rad);
-  }
-  if (theme.avatar_stroke || theme.avatar_stroke === 0) {
-    this.noFill();
-    this.stroke(theme.avatar_stroke);
-    this.ellipse(x,y,rad,rad);
-  }
-});
-
-
 // ----
+// Draw
+// ----
+
+function draw() {
+  FTEMP.draw();
+}
+
 // Misc
-// ----
-
-function date(time) {
-  
-  var seconds = (Date.now() - time) / 1000;
-
-  if (time == 0) return "never";
-
-  var interval = floor(seconds / (365.25 * 24 * 60 * 60));
-  if (interval == 1) return "1 year ago";
-  else if (interval > 1) return interval + " years ago";
-  
-  interval = floor(seconds / (30.4375 * 24 * 60 * 60));
-  if (interval == 1) return "1 month ago";
-  else if (interval > 1) return interval + " months ago";
-  
-  interval = floor(seconds / (7 * 24 * 60 * 60));
-  if (interval == 1) return "1 week ago";
-  else if (interval > 1) return interval + " weeks ago";
-  
-  interval = floor(seconds / (24 * 60 * 60));
-  if (interval == 1) return "1 day ago";
-  else if (interval > 1) return interval + " days ago";
-  
-  interval = floor(seconds / (60 * 60));
-  if (interval == 1) return "1 hour ago";
-  else if (interval > 1) return interval + " hours ago";
-  
-  interval = floor(seconds / (60));
-  if (interval == 1) return "1 minute ago";
-  else if (interval > 1) return interval + " minutes ago";
-  
-  interval = floor(seconds);
-  if (interval == 1) return "1 second ago";
-  return interval + " seconds ago";
-  
-  //return new Date(time).toUTCString();
-}
 function censor(str) {
   if (!str) return "";
   for (var word in censorList) {
@@ -2348,23 +2464,6 @@ var censorList = {
   "sex": "***",
 };
 
-//setServer(testing_server);
-
-setInterval((function coins(){
-  for (var i = 0; i < 10; i++) setTimeout(function() {
-    if (Date.now()-_lastEventTime >= 1000) return;
-    if (!user.data) return;
-    user.balance += 0.1;
-  },random()*60000);
-  return coins;
-})(),60000);
-
-setInterval((function active(){
-  if (!user.name) return active;
-  setKeyValue("last_active_user_"+user.name,Date.now());
-  return active;
-})(),15000);
-  
 
 // Test urls
 // URL: https://pumpkin-smasher.repl.co
