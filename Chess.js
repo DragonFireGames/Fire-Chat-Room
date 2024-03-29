@@ -1517,7 +1517,10 @@ defaultData.chessElo = 1200;
 function showChessProfile(color) {
   var name = data[color].name;
   var prof = profileCache[name];
-  if (!prof) return;
+  if (!prof) {
+    loadProfile(name);
+    return;
+  }
   strokeWeight(1);
   var hover = mouseEllipse(17.5,17.5,35,35);
   if (hover) {
