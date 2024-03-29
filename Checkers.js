@@ -1721,7 +1721,7 @@ pageMap.game.before = function() {
     if (hover) cursor(HAND);
     if (data.board[x] && data.board[x][y]) {
       stroke("rgba(0,0,0,0.3)");
-      strokeWeight(3);
+      strokeWeight(3/28);
       noFill();
       if (hover) ellipse(tx+0.5,ty+0.5,13/14,13/14);
       else ellipse(tx+0.5,ty+0.5,6/7,6/7);
@@ -1848,19 +1848,29 @@ function onUserLeave(name) {
 
 function checkForGameEnd(c,board) {
   board = board || data.board;
-  var count = 0;
-  var moves = 0;
-  for (var x = 0; x < 8; x++) {
-    for (var y = 0; y < 8; y++) {
-      if (!board[x] || !board[x][y] || board[x][y][0] != c) continue;
-      moves += getMoves(x,y,false,true,board);
-      count++;
+  function checkMaterial() {
+    for (var x = 0; x < 8; x++) {
+      for (var y = 0; y < 8; y++) {
+        if (!board[x] || !board[x][y] || board[x][y][0] != c) continue;
+        return true;
+      }
     }
+    return false;
   }
-  if (count == 0) {
+  if (!checkMaterial()) {
     return "win";
   }
-  if (moves == 0) {
+  function checkMoves() {
+    for (var x = 0; x < 8; x++) {
+      for (var y = 0; y < 8; y++) {
+        if (!board[x] || !board[x][y] || board[x][y][0] != c) continue;
+        var moves = getMoves(x,y,false,true,board);
+        if (moves > 0) return true;
+      }
+    }
+    return false;
+  }
+  if (!checkMoves()) {
     return "draw";
   }
   return false;
