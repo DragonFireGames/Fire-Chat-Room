@@ -1670,7 +1670,7 @@ pageMap.game.before = function() {
   showChessProfile(oppColor);
   translate(-56,-7);
   //
-  var myTurn = userKeys[data.turn] == user.name;
+  var myTurn = data[data.turn].name == user.name;
   translate(width/2,height/2);
   push();
   scale(36,36);
@@ -1714,7 +1714,7 @@ pageMap.game.before = function() {
       if (!hover) continue;
       cursor(HAND);//cursor('grab');
       //if (mouseIsPressed) cursor('grabbing');
-      if (clicked && (!data.takeonly || (x == data.takeonly.x && data.takeonly.y == y))) {
+      if (clicked) {
         //playSound(clickSound);
         selX = x;
         selY = y;
@@ -1731,7 +1731,7 @@ pageMap.game.before = function() {
     if (hover) cursor(HAND);
     if (data.board[x] && data.board[x][y]) {
       stroke("rgba(0,0,0,0.3)");
-      strokeWeight(3);
+      strokeWeight(3/28);
       noFill();
       if (hover) ellipse(tx+0.5,ty+0.5,13/14,13/14);
       else ellipse(tx+0.5,ty+0.5,6/7,6/7);
@@ -1743,11 +1743,12 @@ pageMap.game.before = function() {
       else ellipse(tx+0.5,ty+0.5,5/14,5/14);
     }
     if (hover && clicked) {
+      clicked = false;
       //playSound(clickSound);
       if (data.board[x][y]) data[color].captured.push(data.board[x][y]);
       data.board[x][y] = data.board[sx][sy];
       data.board[sx][sy] = "";
-      data.pawn_push = false
+      data.pawn_push = false;
       if (moves[i][2] == "push") {
         data.pawn_push = x;
       }
@@ -1876,33 +1877,43 @@ function onUserLeave(name) {
 
 function checkForChecks(c,board) {
   board = board || data.board;
-  var check = false;
   for (var x = 0; x < 8; x++) {
     for (var y = 0; y < 8; y++) {
       if (board[x][y] && board[x][y][0] != c) {
-        getMoves(x,y,true,board).forEach(function(v) {
+        var list = getMoves(x,y,true,board);
+        for (var i = 0; i < list.length; i++) {
+          var v = list[i];
           if (board[v[0]][v[1]] == c+"k") {
-            check = true;
+            return true;
           }
-        });
+        }
       }
     }
   }
-  return check;
+  return false;
 }
 function checkForGameEnd(c,board) {
   board = board || data.board;
-  var material = false;
-  var moves = 0;
-  for (var x = 0; x < 8; x++) {
-    for (var y = 0; y < 8; y++) {
-      if (board[x][y] && board[x][y][1] != "k") material = true;
-      if (!board[x] || !board[x][y] || board[x][y][0] != c) continue;
-      moves += getMoves(x,y).length;
+  function checkMaterial() {
+    for (var x = 0; x < 8; x++) {
+      for (var y = 0; y < 8; y++) {
+        if (board[x][y] && board[x][y][1] != "k") return true;
+      }
     }
+    return false;
   }
-  if (!material) return "no-material";
-  if (moves == 0) {
+  if (!checkMaterial()) return "no-material";
+  function checkMoves() {
+    for (var x = 0; x < 8; x++) {
+      for (var y = 0; y < 8; y++) {
+        if (!board[x] || !board[x][y] || board[x][y][0] != c) continue;
+        var moves = getMoves(x,y,false,board).length;
+        if (moves > 0) return true;
+      }
+    }
+    return false;
+  }
+  if (!checkMoves()) {
     var incheck = checkForChecks(c,board);
     if (incheck) return "checkmate";
     else return "stalemate";
@@ -1911,7 +1922,7 @@ function checkForGameEnd(c,board) {
 }
 
 function getMoves(x,y,loop,board) {
-  if (!loop && moveCache[x+","+y]) return moveCache[x+","+y];
+  if (board == data.board && moveCache[x+","+y]) return moveCache[x+","+y];
   board = board || data.board;
   var p = board[x][y];
   var c = p[0];
@@ -2066,7 +2077,7 @@ function getMoves(x,y,loop,board) {
       moves.splice(i,1);
     }
   }
-  if (!loop) moveCache[x+","+y] = moves;
+  if (board == data.board) moveCache[x+","+y] = moves;
   return moves;
 }
 
