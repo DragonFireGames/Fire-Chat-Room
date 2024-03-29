@@ -1411,14 +1411,18 @@ matchmakingbtn.style.textSize = 20;
 matchmakingbtn.hoverStyle.textSize = 20;
 matchmakingbtn.clickStyle.textSize = 20;
 matchmakingbtn.onclick = function() {
-  updateKeyValue("matchmaking",function(gid){
-    if (!gid) {
-      gid = randomId(8);
-      joinMatch(gid);
-      return gid;
-    }
-    joinMatch(gid);
-    return false;
+  getKeyValue("matchmaking",function(gid){
+    getKeyValue("match_"+gid+"_users",function(v){
+      console.log(gid);
+      console.log(v);
+      if (!v) v = {};
+      v[user.name] = user.data;
+      setKeyValue("match_"+gid+"_users",v);
+      joinMatch(gid,true);
+      if (Object.keys(v).length >= 2) {
+        setKeyValue("matchmaking",randomId(8));
+      }
+    });
   });
 };
 
@@ -1604,6 +1608,16 @@ var moveCache = {};
 pageMap.game.before = function() {
   var userKeys = Object.keys(game.users).sort();
   //
+  if (userKeys.length != 2 && !data) {
+    noStroke();
+    fill(theme.text);
+    strokeWeight(1);
+    textAlign(CENTER,CENTER);
+    textSize(26);
+    text("Waiting for\nsecond player to join...",width/2,height/2);
+    return;
+  }
+  //
   getKeyValue(game.id+"_data",function(b) {
     data = b || data;
     if (data && typeof data == 'string') data = data;
@@ -1643,16 +1657,6 @@ pageMap.game.before = function() {
       setKeyValue(game.id+"_data",data);
     }
   });
-  //
-  if (userKeys.length != 2 && !data) {
-    noStroke();
-    fill(theme.text);
-    strokeWeight(1);
-    textAlign(CENTER,CENTER);
-    textSize(26);
-    text("Waiting for\nsecond player to join...",width/2,height/2);
-    return;
-  };
   //
   if (!data) return;
   if (!data.white) return;
