@@ -1143,9 +1143,9 @@ window.Client = function() {
       uid:userId
     },authenticate(callback),failure);
   };
-  cli.refer = function(id,p) {
-    var url = "https://studio.code.org/projects/gamelab/"+id+"/"+getURLPath()[3];
-    if (authtoken) url += "?auth="+encodeURIComponent(authtoken);
+  cli.refer = function(id,p,a) {
+    var url = "https://studio.code.org/projects/gamelab/"+id+"/"+(getURLPath()[3]||"");
+    if (authtoken) url += "?auth="+encodeURIComponent(authtoken)+(a||"");
     prompt(p||"Copy and paste in new tab:",url);
   };
   cli.referAuth = function(callback,failure) {
@@ -1160,7 +1160,7 @@ window.Client = function() {
       return;
     }
     userapi.send("referauth",{
-      tok:params.auth,
+      tok:decodeURIComponent(params.auth),
       uid:userId
     },authenticate(callback),failure);
   };
