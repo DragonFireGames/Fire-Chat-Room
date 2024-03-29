@@ -1686,7 +1686,7 @@ function sendMessage() {
     currentRoom.editMsg(editingMessage);
     editingMessage = false;
   } else {
-    var matches = input.value.match(/(?<=\@)[^\s]+/g);
+    var matches = input.value.match(/(?<=\@)[^\s]+/g) || [];
     for (var i = 0; i < matches.length; i++) {
       notifyUser(matches[i].toLowerCase(),user.data.displayname+" mentioned you!",input.value,{room:currentRoom.name});
     }
