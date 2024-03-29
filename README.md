@@ -18,6 +18,18 @@ Dependencies:
 <br>- [Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) (Required)
 <br>- [FullEmojiList.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FullEmojiList.js) (Optional)
 
+[Checkers.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/Checkers.js) -> Multiplayer checkers game made using the [cdo-backend](https://github.com/DragonFireGames/cdo-backend)<br>
+Dependencies:
+<br>- [FGUI.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FGUI.js) (Required)
+<br>- [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FKEY.js) (Required)
+<br>- [Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) (Required)
+
+[Chess.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/Chess.js) -> Multiplayer chess game made using the [cdo-backend](https://github.com/DragonFireGames/cdo-backend)<br>
+Dependencies:
+<br>- [FGUI.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FGUI.js) (Required)
+<br>- [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FKEY.js) (Required)
+<br>- [Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) (Required)
+
 <h3>Libraries</h3>
 
 Publish these with the same name as the file and attach them to the projects or use them yourself.
