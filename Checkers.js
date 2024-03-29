@@ -1851,29 +1851,19 @@ function onUserLeave(name) {
 
 function checkForGameEnd(c,board) {
   board = board || data.board;
-  function checkMaterial() {
-    for (var x = 0; x < 8; x++) {
-      for (var y = 0; y < 8; y++) {
-        if (!board[x] || !board[x][y] || board[x][y][0] != c) continue;
-        return true;
-      }
+  var pieces = 0, moves = 0;
+  for (var x = 0; x < 8; x++) {
+    for (var y = 0; y < 8; y++) {
+      if (!board[x] || !board[x][y] || board[x][y][0] != c) continue;
+      moves += getMoves(x,y,false,true,board);
+      if (moves > 0) return false;
+      pieces++;
     }
-    return false;
   }
-  if (!checkMaterial()) {
+  if (pieces == 0) {
     return "win";
   }
-  function checkMoves() {
-    for (var x = 0; x < 8; x++) {
-      for (var y = 0; y < 8; y++) {
-        if (!board[x] || !board[x][y] || board[x][y][0] != c) continue;
-        var moves = getMoves(x,y,false,true,board);
-        if (moves > 0) return true;
-      }
-    }
-    return false;
-  }
-  if (!checkMoves()) {
+  if (moves == 0) {
     return "draw";
   }
   return false;
