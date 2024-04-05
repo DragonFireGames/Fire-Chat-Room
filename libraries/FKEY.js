@@ -199,15 +199,23 @@ window._isImageDataError = function(img) {
   var msg = String.fromCharCode.apply(null, data);
   return msg === '{"Eÿrroÿr":';
 }
+window._isImageDataAudio = function(img) {
+  if (img.pixels.length < 1) img.loadPixels();
+  if (img.pixels.length < 1 || img === undefined) {
+    return false;
+  }
+  var data = img.pixels.slice(0,11);
+  var msg = String.fromCharCode.apply(null, data);
+  return msg === '{"Aÿudiÿo":';
+}
 
 // fetch
-window.fetch = function(url,data,callback,failure,rid) {
+function fetchAnchor(path,callback,failure,rid) {
   var obj = {};
-  var rid = rid || random();
-  var json = JSON.stringify(data || {});
+  rid = rid || random();
   obj._counter = 0;
   obj.loaded = false;
-  var fetchurl = server+"/fetch?url="+encodeURIComponent(url)+"&data="+encodeURIComponent(json)+"&reqid="+encodeURIComponent(rid);
+  var fetchurl = server+path;
   obj._mediaUrl = "https://studio.code.org/media?u="+encodeURIComponent(fetchurl);
   obj._image = loadImage(fetchurl, function (img) {
     obj.loaded = true;
@@ -221,12 +229,20 @@ window.fetch = function(url,data,callback,failure,rid) {
     obj.image = function() {
       return img;
     };
+    obj._audio = null;
+    obj.audio = function(callback,failure) {
+      if (obj._audio) return obj._audio;
+      if (!_isImageDataAudio(img)) return null;
+      var data = obj.json().Audio;
+      obj._audio = loadSound(data.url,callback,failure,data);
+      return obj._audio;
+    };
     obj.text = function() {
       return _parseImageIntoData(img);
     };
     obj.json = function() {
       var char0 = String.fromCharCode(img.pixels[0]);
-      if (!char0.match(/^[\[\{\d"]$/)) return null;
+      if (!char0.match(/^[\[\{\d"']$/)) return null;
       var text = obj.text();
       try {
         return JSON.parse(text);
@@ -248,7 +264,7 @@ window.fetch = function(url,data,callback,failure,rid) {
       // Ping for result every second
       obj._counter++;
       setTimeout(function(){
-        fetch(url,data,callback,failure,rid);
+        fetchAnchor(path,callback,failure,rid);
       },1000);
       return;
     }
@@ -257,6 +273,56 @@ window.fetch = function(url,data,callback,failure,rid) {
   });
   return obj;
 }
+window.fetch = function(url,data,callback,failure,rid) {
+  rid = rid || random();
+  var json = JSON.stringify(data || {});
+  var path = "/fetch?url="+encodeURIComponent(url)+"&data="+encodeURIComponent(json)+"&reqid="+encodeURIComponent(rid);
+  console.log(server+path);
+  return fetchAnchor(path,callback,failure,rid);
+};
+window.generateText = function(model,data,callback,failure,rid) {
+  rid = rid || random();
+  var json = JSON.stringify(data || {});
+  var path = "/ai/"+model+"?data="+encodeURIComponent(json)+"&reqid="+encodeURIComponent(rid);
+  var obj = {};
+  fetchAnchor(path,function(e) {
+    e = e.json();
+    if (e === null) {
+      if (typeof failure == 'function') failure("Not JSON");
+      return;
+    }
+    for (var i in e) obj[i] = e[i];
+    if (typeof callback == 'function') callback(obj);
+  },failure,rid);
+  return obj;
+};
+window.generateImage = function(model,data,callback,failure,rid) {
+  rid = rid || random();
+  var json = JSON.stringify(data || {});
+  var path = "/ai/"+model+"?data="+encodeURIComponent(json)+"&reqid="+encodeURIComponent(rid);
+  var obj = {};
+  var req = fetchAnchor(path,function(e) {
+    obj.image = e._image;
+    if (typeof callback == 'function') callback(obj);
+  },failure,rid);
+  obj.src = req._mediaUrl;
+  obj.image = req._image;
+  return obj;
+};
+window.generateAudio = function(model,data,callback,failure,rid) {
+  rid = rid || random();
+  var json = JSON.stringify(data || {});
+  var path = "/ai/"+model+"?data="+encodeURIComponent(json)+"&reqid="+encodeURIComponent(rid);
+  var obj = {};
+  console.log(server+path);
+  var req = fetchAnchor(path,function(e) {
+    obj.audio = e.audio(function(){
+      if (typeof callback == 'function') callback(obj);
+    },failure);
+    obj.src = "https://studio.code.org/media?u="+encodeURIComponent(obj.audio.url);
+  },failure,rid);
+  return obj;
+};
 
 // misc
 window.loadHTML = function(url,callback,failure,obj) {
@@ -264,7 +330,7 @@ window.loadHTML = function(url,callback,failure,obj) {
   fetch(url,{},function(e){
     e = e.html(obj);
     if (e === null) {
-      if (typeof failure == 'function') failure({ Error: "Not JSON" });
+      if (typeof failure == 'function') failure("Not HTML");
       return;
     }
     if (typeof callback == 'function') callback(obj);
@@ -436,7 +502,7 @@ window.loadJSON = function(url,callback,failure,obj) {
   fetch(url,{},function(e){
     e = e.json();
     if (e === null) {
-      if (typeof failure == 'function') failure({ Error: "Not JSON" });
+      if (typeof failure == 'function') failure("Not JSON");
       return;
     }
     for (var i in e) obj[i] = e[i];
@@ -854,16 +920,17 @@ function loadAudioData(url,callback,failure) {
     if (typeof callback == 'function') callback(JSON.parse(data));
   }, failure);
 };
-window.loadSound = function(url,callback,failure) {
-  var obj = {};
+window.loadSound = function(url,callback,failure,data) {
+  var obj = data||{};
   obj.url = url;
   obj.loop = false;
   playSound(url,false,function(){
     stopSound(url);
-    loadAudioData(url,function(data){
+    if (!data) loadAudioData(url,function(data){
       for (var i in data) obj[i] = data[i];
       if (typeof callback == 'function') callback(obj);
     },failure);
+    else if (typeof callback == 'function') callback(obj);
   },failure);
   obj.isPlaying = false;
   obj._timeout = false;
