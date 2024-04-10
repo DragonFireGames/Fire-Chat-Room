@@ -30,6 +30,17 @@ Dependencies:
 <br>- [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FKEY.js) (Required)
 <br>- [Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) (Required)
 
+[Codemon.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/Codemon.js) -> Multiplayer card game made using the [cdo-backend](https://github.com/DragonFireGames/cdo-backend)<br>
+Dependencies:
+<br>- [FGUI.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FGUI.js) (Required)
+<br>- [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FKEY.js) (Required)
+<br>- [Vault.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/Vault.js) (Required)
+
+[AI.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/Codemon.js) -> Generate images and text using [Huggingface's API](https://huggingface.co/) & the [cdo-backend](https://github.com/DragonFireGames/cdo-backend)<br>
+Dependencies:
+<br>- [FGUI.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FGUI.js) (Required)
+<br>- [FKEY.js](https://github.com/DragonFireGames/Fire-Chat-Room/raw/main/libraries/FKEY.js) (Required)
+
 <h3>Libraries</h3>
 
 Publish these with the same name as the file and attach them to the projects or use them yourself.
