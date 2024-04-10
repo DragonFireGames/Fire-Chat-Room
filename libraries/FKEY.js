@@ -19,15 +19,15 @@ window.createDatabaseStructure = function(getter,setter) {
   obj.set = setter||setKeyValue;
   obj.log = function(key) {
     obj.get(key,console.log,console.log);
-  }
+  };
   obj.delete = function(key,success,failure) {
     obj.set(key,undefined,success,failure);
-  }
+  };
   obj.update = function(key,callback,success,failure) {
-    obj.get(key,function(v){
-      v = callback(v);
-      if (v === undefined) return;
-      obj.set(key,v,success,failure);
+    obj.get(key,function(value){
+      value = callback(value);
+      if (value === undefined) return;
+      obj.set(key,value,success,failure);
     },failure);
   };
   obj._watcherList = {};
@@ -35,14 +35,19 @@ window.createDatabaseStructure = function(getter,setter) {
     if (obj._watcherList[key]) obj.abandon(key);
     rate = rate || refreshRate;
     obj._watcherList[key] = setInterval(function(){
-      obj.get(key,function(data){
-        callback(data);
+      obj.get(key,function(value){
+        callback(value);
       },failure);
     },rate);
   };
   obj.abandon = function(key) {
     clearInterval(obj._watcherList[key]);
     delete obj._watcherList[key];
+  };
+  obj.size = function(key,callback,failure) {
+    obj.get(key,function(value){
+      (callback||console.log)(JSON.stringify(value).length);
+    },failure);
   };
   return obj;
 };
@@ -54,7 +59,7 @@ window._setKeyValue = window.setKeyValue;
 window._getKeyValue = window.getKeyValue;
 // New
 window.keyValueDB = createDatabaseStructure();
-keyValueDB.get = function(key,callback,failure) {
+window.getKeyValue = keyValueDB.get = function(key,callback,failure) {
   key = encodeURIComponent(key);
   window._getKeyValue(key,function(value){
     if (value === undefined) return callback();
@@ -66,20 +71,23 @@ keyValueDB.get = function(key,callback,failure) {
     }
   },failure||console.log);
 };
-keyValueDB.set = function(key,value,success,failure) {
+window.setKeyValue = keyValueDB.set = function(key,value,success,failure) {
   key = encodeURIComponent(key);
   value = JSON.stringify(value);
   window._setKeyValue(key,value,success,failure||console.log);
 };
-window.getKeyValue = keyValueDB.get;
-window.setKeyValue = keyValueDB.set;
+window.sizeKeyValue = keyValueDB.size = function(key,success,failure) {
+  keyValueDB.get(key,function(value){
+    (callback||console.log)(JSON.stringify(JSON.stringify(value)).length);
+  },failure);
+};
 window.logKeyValue = keyValueDB.log;
 window.updateKeyValue = keyValueDB.update;
 window.watchKeyValue = keyValueDB.watch;
 window.abandonKeyValue = keyValueDB.abandon;
 // Big Key
 window.bigKeyValueDB = createDatabaseStructure();
-bigKeyValueDB.get = function(key,callback,failure) {
+window.getBigKeyValue = bigKeyValueDB.get = function(key,callback,failure) {
   key = encodeURIComponent(key);
   var value = "";
   var n = 0;
@@ -105,7 +113,7 @@ bigKeyValueDB.get = function(key,callback,failure) {
   };
   getNext();
 };
-bigKeyValueDB.set = function(key,value,success,failure) {
+window.getBigKeyValue = bigKeyValueDB.set = function(key,value,success,failure) {
   key = encodeURIComponent(key);
   value = JSON.stringify(JSON.stringify(value));
   value = value.substring(1,value.length-1);
@@ -125,21 +133,20 @@ bigKeyValueDB.set = function(key,value,success,failure) {
   }
   setNext();
 };
-window.getBigKeyValue = bigKeyValueDB.get;
-window.setBigKeyValue = bigKeyValueDB.set;
+window.sizeBigKeyValue = bigKeyValueDB.size = function(key,success,failure) {
+  bigKeyValueDB.get(key,function(value){
+    (callback||console.log)(JSON.stringify(JSON.stringify(value)).length);
+  },failure);
+};
 window.logBigKeyValue = bigKeyValueDB.log;
 window.updateBigKeyValue= bigKeyValueDB.update;
 
-window.valueSize = function(v) {
-  return JSON.stringify(JSON.stringify(v));
-}
-
 // Random id
 window.randomId = function(len,alphabet) {
-  alphabet = alphabet || "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/+"
+  alphabet = alphabet || "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" // -_/+"
   var str = "";
   for (var i = 0; i < len; i++) {
-    str += alphabet[randomNumber(0,alphabet.length-1)];
+    str += alphabet[floor(random()*alphabet.length)];
   }
   return str;
 };
@@ -176,14 +183,9 @@ window._parseImageIntoData = function(img) {
   var raw = msg;
   /*/// SUPER FAST BIG BRAIN OWOKOYO VERSION 
   var data = img.pixels;
-  //var num = (data[2] << 16) + (data[1] << 8) + data[0] + 4; // From owokoyo not sure why he has it
-  var num = img.pixels.length;
   var pos = 0;
-  while (num > 0) {
-    var toAdd = String.fromCharCode.apply(null, data.slice(pos, pos + 40000));
-    num -= 30000;
-    msg += toAdd;
-    pos += 40000;
+  while (pos < data.length) {
+    msg += String.fromCharCode.apply(null, data.slice(pos, pos += 40000));
   }
   var raw = msg.replace(/(\xff|\x00)/g, "");
   //*/
@@ -281,6 +283,7 @@ window.fetch = function(url,data,callback,failure,rid) {
   return fetchAnchor(path,callback,failure,rid);
 };
 window.generateText = function(model,data,callback,failure,rid) {
+  if (!data) return loadJSON("https://api-inference.huggingface.co/models/"+model,callback,failure);
   rid = rid || random();
   var json = JSON.stringify(data || {});
   var path = "/ai/"+model+"?data="+encodeURIComponent(json)+"&reqid="+encodeURIComponent(rid);
@@ -297,6 +300,7 @@ window.generateText = function(model,data,callback,failure,rid) {
   return obj;
 };
 window.generateImage = function(model,data,callback,failure,rid) {
+  if (!data) return loadJSON("https://api-inference.huggingface.co/models/"+model,callback,failure);
   rid = rid || random();
   var json = JSON.stringify(data || {});
   var path = "/ai/"+model+"?data="+encodeURIComponent(json)+"&reqid="+encodeURIComponent(rid);
@@ -310,6 +314,7 @@ window.generateImage = function(model,data,callback,failure,rid) {
   return obj;
 };
 window.generateAudio = function(model,data,callback,failure,rid) {
+  if (!data) return loadJSON("https://api-inference.huggingface.co/models/"+model,callback,failure);
   rid = rid || random();
   var json = JSON.stringify(data || {});
   var path = "/ai/"+model+"?data="+encodeURIComponent(json)+"&reqid="+encodeURIComponent(rid);
@@ -319,7 +324,8 @@ window.generateAudio = function(model,data,callback,failure,rid) {
     obj.audio = e.audio(function(){
       if (typeof callback == 'function') callback(obj);
     },failure);
-    obj.src = "https://studio.code.org/media?u="+encodeURIComponent(obj.audio.url);
+    //obj.src = "https://studio.code.org/media?u="+encodeURIComponent(obj.audio.url);
+    obj.src = obj.audio.url+"?del=1";
   },failure,rid);
   return obj;
 };
@@ -1374,7 +1380,7 @@ window.getProfile = function(name,callback) {
   return prof;
 };
 window.loadProfile = function(name,callback) {
-  profileCache[name] = false;
+  if (!profileCache[name]) profileCache[name] = false;
   name = name.replace(/[^\w\d_-]/g,"").toLowerCase();
   userapi.send("get",name,function(data) {
     if (typeof callback == 'function') data = callback(data) || data;
